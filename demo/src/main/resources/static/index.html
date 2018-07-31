@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Staff Registration Form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="alert fade">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <h3 class="text-center"></h3>
+</div>
+<div class="container" onsubmit="submit(event)">
+  <h3>Staff Details</h3>
+  <p>Fill in the details corrsponsing to the respective fields.</p>
+
+  <form class="form-horizontal" id="staffForm">
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="id_no">ID no:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="id_no" placeholder="Enter ID">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="vendor">Vendor:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="vendor" placeholder="Enter Vendor name">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="user_name">Name:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="user_name" placeholder="Enter name">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="mobile">Mobile number:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="mobile" placeholder="Enter mobile nmber">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="designation">Designation:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="designaation" placeholder="Enter Designation">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="date_of_birth">Date of Birth:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="date_of_birth" placeholder="Enter dob">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="date_of_joining">Date of Joining:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="date_of_joining" placeholder="Enter date of joining">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="pf_number">PF number:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="pf_number" placeholder="Enter PF number">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="esi">ESI:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="esi" placeholder="Enter esi">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="next_of_kin">Next of kin:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="next_of_kin" placeholder="Enter next of kin">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="blood_group">Blood group:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="blood_group" placeholder="Enter blood group">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="present_address">Present address:</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" id="present_address"></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="permanent_address">Permanent address:</label>
+    <div class="col-sm-10">
+      <textarea type="text" class="form-control" id="permanent_address"></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="remarks">Remarks:</label>
+    <div class="col-sm-10">
+      <textarea type="text" class="form-control" id="remarks"></textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default" >Submit</button>
+    </div>
+  </div>
+</form>
+
+</div>
+
+<!-- <ul id="d-list">
+</ul> -->
+
+<progress id="prg" value="22" max="100" style="width: 90%;height: 32px;margin: 0 auto;display: block;"></progress>
+<script>
+function submit(e){
+	e.preventDefault();
+	data={}
+	$('*[type="text" ]').each(function(each){
+		data[this.id]=this.value?this.value:'NA';
+	})
+	 $.ajax({
+	      url: '/home/save',
+	      contentType:'application/json',
+	      type: 'POST',
+	      data: JSON.stringify(data),
+	      cache: false,
+	      success: function (response) {
+	    	  $(".alert .text-center").html(response.text);
+	    	  $(".alert").addClass(response.errorneous?'alert-danger':'alert-success').delay(200).addClass("in").fadeOut(3500);
+	      }           
+	  });    
+	
+}
+
+fetch('http://localhost:8080/home/test').then(function (response) {
+    const reader = response.body.getReader();
+    var p = $('#prg');
+    var f = function (d) {
+      if (!d.value) return;
+      var v = parseInt(d.value.map(function (x) {
+        return String.fromCharCode(x)
+      }).join(''));
+      if(isFinite(v) && v <= 1000){
+    	  v = Math.floor(v/10);
+    	  p.attr('value',v+1);
+      }
+      
+     
+      window.scrollTo(0,document.body.scrollHeight);
+      if (!d.done) {
+        reader.read().then(f);
+      }
+    };
+    reader.read().then(f);
+ });
+  
+</script>
+
+</body>
+</html>
